@@ -21,10 +21,24 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    /* Espresso Lib, for UI tests */
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    /* Support Library, to make our app compatible with old devices */
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    /* Lib to access REST services. I like this one, because it abstracts
+    * the complexity of HTTP Protocol and provides a nice and clean way to send
+    * Requests and get it's Responses */
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    /* Google GSON to take care of our serialization/deserialization process */
+    compile 'com.google.code.gson:gson:2.8.0'
+
+    /* JUnit lib */
     testCompile 'junit:junit:4.12'
 }
