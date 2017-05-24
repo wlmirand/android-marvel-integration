@@ -12,4 +12,12 @@ public class ImageResponse {
 
     @SerializedName("extension")
     private String extension;
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
 }

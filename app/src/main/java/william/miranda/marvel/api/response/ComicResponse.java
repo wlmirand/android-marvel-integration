@@ -15,11 +15,25 @@ public class ComicResponse {
     @SerializedName("title")
     private String title;
 
+    @SerializedName("thumbnail")
+    private ImageResponse thumbnail;
+
+    @SerializedName("images")
+    private ImageResponse[] images;
+
     public int getId() {
         return id;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public ImageResponse getThumbnail() {
+        return thumbnail;
+    }
+
+    public ImageResponse[] getImages() {
+        return images;
     }
 }
