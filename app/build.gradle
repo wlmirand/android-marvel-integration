@@ -29,6 +29,8 @@ dependencies {
 
     /* Support Library, to make our app compatible with old devices */
     compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+
 
     /* Lib to access REST services. I like this one, because it abstracts
     * the complexity of HTTP Protocol and provides a nice and clean way to send

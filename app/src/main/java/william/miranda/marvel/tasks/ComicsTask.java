@@ -1,24 +1,28 @@
 package william.miranda.marvel.tasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.IOException;
 
 import retrofit2.Response;
 import william.miranda.marvel.api.ApiWrapper;
-import william.miranda.marvel.api.ImageWrapper;
 import william.miranda.marvel.api.response.ComicDataWrapperResponse;
-import william.miranda.marvel.api.response.ImageResponse;
 
 public class ComicsTask extends AsyncTask<Void, Void, Response<ComicDataWrapperResponse>> {
 
-    private int limit;
-    private int offset;
+    //Interface for Handle the Task Result
+    public interface Callback {
+        void handleResult(ComicDataWrapperResponse bodyResponse);
+    }
 
-    public ComicsTask(int limit, int offset) {
+    private final int limit;
+    private final int offset;
+    private final Callback caller;
+
+    public ComicsTask(int limit, int offset, Callback caller) {
         this.limit = limit;
         this.offset = offset;
+        this.caller = caller;
     }
 
     @Override
@@ -35,6 +39,7 @@ public class ComicsTask extends AsyncTask<Void, Void, Response<ComicDataWrapperR
     protected void onPostExecute(Response<ComicDataWrapperResponse> response) {
         if (response.code() == ApiWrapper.HTTP_SUCCESS_CODE) {
             //Send the response body to the UI
+            caller.handleResult(response.body());
         }
     }
 }
