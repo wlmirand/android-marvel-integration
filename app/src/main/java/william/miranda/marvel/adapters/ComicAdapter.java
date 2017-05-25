@@ -47,9 +47,23 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHol
         holder.setData(comic);
     }
 
+    /**
+     * Return the number of items
+     * @return
+     */
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    /**
+     * Set the new DataSet
+     * @param newData
+     */
+    public void swap(List<Comic> newData) {
+        data.clear();
+        data.addAll(newData);
+        notifyDataSetChanged();
     }
 
     public class ComicViewHolder extends RecyclerView.ViewHolder {
