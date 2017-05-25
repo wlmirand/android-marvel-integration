@@ -2,6 +2,7 @@ package william.miranda.marvel.api;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -30,6 +31,8 @@ public class ApiWrapper {
     private ApiWrapper() {
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(new AuthInterceptor())
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()

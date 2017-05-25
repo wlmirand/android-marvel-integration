@@ -1,7 +1,5 @@
 package william.miranda.marvel.model;
 
-import android.graphics.Bitmap;
-
 import william.miranda.marvel.api.ImageWrapper;
 import william.miranda.marvel.api.response.ComicResponse;
 
@@ -16,7 +14,6 @@ public class Comic {
 
     /**
      * Constructor to create our POJO from the Response
-     * We may use the same, but I dont think it's a good practice.
      * @param response
      */
     public Comic(ComicResponse response) {
@@ -24,6 +21,18 @@ public class Comic {
         this.title = response.getTitle();
         this.thumbnailUrl = new ImageWrapper(response.getThumbnail())
                 .getUrl(ImageWrapper.ImageVariant.standard_large);
+    }
+
+    /**
+     * Constructor to create the POJO from the DB
+     * @param id
+     * @param title
+     * @param thumbnailUrl
+     */
+    public Comic(int id, String title, String thumbnailUrl) {
+        this.id = id;
+        this.title = title;
+        this.thumbnailUrl = thumbnailUrl;
     }
 
     public int getId() {

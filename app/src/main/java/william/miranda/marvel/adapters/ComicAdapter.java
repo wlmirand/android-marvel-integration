@@ -1,5 +1,6 @@
 package william.miranda.marvel.adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,13 +14,16 @@ import java.util.List;
 
 import william.miranda.marvel.R;
 import william.miranda.marvel.model.Comic;
+import william.miranda.marvel.storage.ImageCache;
 import william.miranda.marvel.tasks.DownloadImageTask;
 
 public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHolder> {
 
+    private final Context context;
     private List<Comic> data;
 
-    public ComicAdapter() {
+    public ComicAdapter(Context context) {
+        this.context = context;
         this.data = new ArrayList<>();
     }
 
@@ -90,7 +94,14 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHol
          */
         private void setData(Comic comic) {
             comicTitle.setText(comic.getTitle());
-            new DownloadImageTask(comic.getThumbnailUrl(), this).execute();
+
+            //If we have the image cached, use it
+            if (ImageCache.imageExists(context, comic.getThumbnailUrl())) {
+                comicThumbnail.setImageBitmap(ImageCache.loadImage(context, comic.getThumbnailUrl()));
+            } else {
+                //Download only if needed
+                new DownloadImageTask(context, comic.getThumbnailUrl(), this).execute();
+            }
         }
 
         @Override

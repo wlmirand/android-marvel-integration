@@ -17,6 +17,7 @@ import william.miranda.marvel.api.ApiWrapper;
 import william.miranda.marvel.api.response.ComicDataWrapperResponse;
 import william.miranda.marvel.api.response.ComicResponse;
 import william.miranda.marvel.model.Comic;
+import william.miranda.marvel.storage.db.ComicDAO;
 import william.miranda.marvel.tasks.ComicsTask;
 
 /**
@@ -45,7 +46,7 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
         View view = inflater.inflate(R.layout.fragment_list_comics, container, false);
 
         //Create the empty Adapter
-        adapter = new ComicAdapter();
+        adapter = new ComicAdapter(getContext());
 
         //Prepare the RecyclerView
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -60,19 +61,30 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
 
     /**
      * Callback to handle new Data from ComicsTask
-     * @param bodyResponse
+     * @param responseBody
      */
     @Override
-    public void handleResult(ComicDataWrapperResponse bodyResponse) {
-        if (bodyResponse.getCode() == ApiWrapper.HTTP_SUCCESS_CODE) {
-            List<Comic> listComic = new ArrayList<>();
+    public void handleResult(ComicDataWrapperResponse responseBody) {
+
+        List<Comic> listComic;
+        ComicDAO comicDAO = new ComicDAO(getContext());
+        if (responseBody != null &&
+                responseBody.getCode() == ApiWrapper.HTTP_SUCCESS_CODE) {
             //If Success, we iterate all ComicResponse and create our comic POJOs
-            for (ComicResponse item : bodyResponse.getData().getResults()) {
+            listComic = new ArrayList<>();
+            for (ComicResponse item : responseBody.getData().getResults()) {
                 listComic.add(new Comic(item));
             }
 
-            //Fill the adapter with new Data
-            adapter.swap(listComic);
+            //save the list on the DB
+            comicDAO.insertList(listComic);
+        } else {
+            //Could not fetch data from Api, so we use the Local data
+            listComic = comicDAO.query();
         }
+
+
+        //Fill the adapter with new Data
+        adapter.swap(listComic);
     }
 }

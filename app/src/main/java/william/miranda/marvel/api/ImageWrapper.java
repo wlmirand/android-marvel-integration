@@ -49,5 +49,4 @@ public class ImageWrapper {
                 .append(imageResponse.getExtension())
                 .toString();
     }
-
 }

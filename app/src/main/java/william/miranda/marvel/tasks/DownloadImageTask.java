@@ -1,5 +1,6 @@
 package william.miranda.marvel.tasks;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -7,6 +8,8 @@ import android.os.AsyncTask;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+
+import william.miranda.marvel.storage.ImageCache;
 
 /**
  * Task to download Images
@@ -18,17 +21,25 @@ public class DownloadImageTask extends AsyncTask<Void, Void, Bitmap> {
         void handleResult(Bitmap result);
     }
 
+    private final Context context;
     private final String url;
     private final Callback caller;
 
-    public DownloadImageTask(String url, Callback caller) {
+    public DownloadImageTask(Context context, String url, Callback caller) {
+        this.context = context;
         this.url = url;
         this.caller = caller;
     }
 
     @Override
     protected Bitmap doInBackground(Void... params) {
-        return downloadBitmapFromUrl(url);
+        //Download the image
+        Bitmap bitmap = downloadBitmapFromUrl(url);
+
+        //after download, add it to cache
+        ImageCache.saveImage(context, url, bitmap);
+
+        return bitmap;
     }
 
     @Override
