@@ -1,5 +1,7 @@
 package william.miranda.marvel.model;
 
+import android.graphics.Bitmap;
+
 import william.miranda.marvel.api.ImageWrapper;
 import william.miranda.marvel.api.response.ComicResponse;
 
@@ -10,7 +12,7 @@ public class Comic {
 
     private int id;
     private String title;
-    private String thumbnail;
+    private String thumbnailUrl;
 
     /**
      * Constructor to create our POJO from the Response
@@ -20,7 +22,7 @@ public class Comic {
     public Comic(ComicResponse response) {
         this.id = response.getId();
         this.title = response.getTitle();
-        this.thumbnail = new ImageWrapper(response.getThumbnail())
+        this.thumbnailUrl = new ImageWrapper(response.getThumbnail())
                 .getUrl(ImageWrapper.ImageVariant.standard_large);
     }
 
@@ -32,7 +34,7 @@ public class Comic {
         return title;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
     }
 }

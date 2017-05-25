@@ -12,7 +12,7 @@ public class ComicsTask extends AsyncTask<Void, Void, Response<ComicDataWrapperR
 
     //Interface for Handle the Task Result
     public interface Callback {
-        void handleResult(ComicDataWrapperResponse bodyResponse);
+        void handleResult(ComicDataWrapperResponse result);
     }
 
     private final int limit;

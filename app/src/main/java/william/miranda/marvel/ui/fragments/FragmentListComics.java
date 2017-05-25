@@ -30,8 +30,7 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new ComicAdapter();
-        new ComicsTask(100, 0, this).execute();
+        setRetainInstance(true);
     }
 
     /**
@@ -45,9 +44,16 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_comics, container, false);
 
+        //Create the empty Adapter
+        adapter = new ComicAdapter();
+
+        //Prepare the RecyclerView
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //Run the task to fetch comics from Api
+        new ComicsTask(100, 0, this).execute();
 
         return view;
     }
@@ -60,11 +66,12 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
     public void handleResult(ComicDataWrapperResponse bodyResponse) {
         if (bodyResponse.getCode() == ApiWrapper.HTTP_SUCCESS_CODE) {
             List<Comic> listComic = new ArrayList<>();
-            //If Success, we iterate all ComicResponse and create our comic POJO
+            //If Success, we iterate all ComicResponse and create our comic POJOs
             for (ComicResponse item : bodyResponse.getData().getResults()) {
                 listComic.add(new Comic(item));
             }
 
+            //Fill the adapter with new Data
             adapter.swap(listComic);
         }
     }

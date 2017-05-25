@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/adapterMarginLeft"
+    android:layout_marginRight="@dimen/adapterMarginRight"
+    android:layout_marginTop="@dimen/adapterMarginTop"
+    android:layout_marginBottom="@dimen/adapterMarginBottom">
+
+    <ImageView
+        android:id="@+id/comic_thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/comic_title"

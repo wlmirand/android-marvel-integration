@@ -1,9 +1,11 @@
 package william.miranda.marvel.adapters;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.List;
 
 import william.miranda.marvel.R;
 import william.miranda.marvel.model.Comic;
+import william.miranda.marvel.tasks.DownloadImageTask;
 
 public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHolder> {
 
@@ -66,17 +69,19 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHol
         notifyDataSetChanged();
     }
 
-    public class ComicViewHolder extends RecyclerView.ViewHolder {
+    protected class ComicViewHolder extends RecyclerView.ViewHolder implements DownloadImageTask.Callback {
 
         private final TextView comicTitle;
+        private final ImageView comicThumbnail;
 
         /**
          * Create a viewHolder and bind the Views
          * @param itemView
          */
-        public ComicViewHolder(View itemView) {
+        private ComicViewHolder(View itemView) {
             super(itemView);
             comicTitle = (TextView) itemView.findViewById(R.id.comic_title);
+            comicThumbnail = (ImageView) itemView.findViewById(R.id.comic_thumbnail);
         }
 
         /**
@@ -85,6 +90,12 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHol
          */
         private void setData(Comic comic) {
             comicTitle.setText(comic.getTitle());
+            new DownloadImageTask(comic.getThumbnailUrl(), this).execute();
+        }
+
+        @Override
+        public void handleResult(Bitmap result) {
+            comicThumbnail.setImageBitmap(result);
         }
     }
 
