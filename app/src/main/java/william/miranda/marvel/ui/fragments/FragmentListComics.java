@@ -1,5 +1,6 @@
 package william.miranda.marvel.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,9 @@ import william.miranda.marvel.api.response.ComicDataWrapperResponse;
 import william.miranda.marvel.api.response.ComicResponse;
 import william.miranda.marvel.model.Comic;
 import william.miranda.marvel.storage.db.ComicDAO;
+import william.miranda.marvel.storage.db.tables.ComicTable;
 import william.miranda.marvel.tasks.ComicsTask;
+import william.miranda.marvel.ui.activities.ComicDetailActivity;
 
 /**
  * Fragment to display a Comics list
@@ -27,6 +30,18 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
 
     private RecyclerView recyclerView;
     private ComicAdapter adapter;
+    private ComicAdapter.OnItemClickListener clickListener = new ComicAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClickListener(Comic comic) {
+
+            //Create the Intent and pass the Comic ID as Extra...
+            Intent intent = new Intent(getContext(), ComicDetailActivity.class);
+            intent.putExtra(ComicTable.COLUMN_ID, comic.getId());
+
+            //Open the detail activity
+            startActivity(intent);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +61,7 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
         View view = inflater.inflate(R.layout.fragment_list_comics, container, false);
 
         //Create the empty Adapter
-        adapter = new ComicAdapter(getContext());
+        adapter = new ComicAdapter(getContext(), clickListener);
 
         //Prepare the RecyclerView
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);

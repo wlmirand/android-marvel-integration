@@ -19,11 +19,20 @@ import william.miranda.marvel.tasks.DownloadImageTask;
 
 public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHolder> {
 
+    /**
+     * Interface to handle clicks
+     */
+    public interface OnItemClickListener {
+        void onItemClickListener(Comic comic);
+    }
+
     private final Context context;
+    private final OnItemClickListener clickListener;
     private List<Comic> data;
 
-    public ComicAdapter(Context context) {
+    public ComicAdapter(Context context, OnItemClickListener clickListener) {
         this.context = context;
+        this.clickListener = clickListener;
         this.data = new ArrayList<>();
     }
 
@@ -40,7 +49,7 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHol
                 .inflate(R.layout.adapter_comic, parent, false);
 
         //Create the associated ViewHolder
-        return new ComicViewHolder(view);
+        return new ComicViewHolder(view, clickListener);
     }
 
     /**
@@ -75,6 +84,7 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHol
 
     protected class ComicViewHolder extends RecyclerView.ViewHolder implements DownloadImageTask.Callback {
 
+        private final OnItemClickListener clickListener;
         private final TextView comicTitle;
         private final ImageView comicThumbnail;
 
@@ -82,8 +92,9 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHol
          * Create a viewHolder and bind the Views
          * @param itemView
          */
-        private ComicViewHolder(View itemView) {
+        private ComicViewHolder(View itemView, OnItemClickListener clickListener) {
             super(itemView);
+            this.clickListener = clickListener;
             comicTitle = (TextView) itemView.findViewById(R.id.comic_title);
             comicThumbnail = (ImageView) itemView.findViewById(R.id.comic_thumbnail);
         }
@@ -102,6 +113,13 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ComicViewHol
                 //Download only if needed
                 new DownloadImageTask(context, comic.getThumbnailUrl(), this).execute();
             }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickListener.onItemClickListener(data.get(getAdapterPosition()));
+                }
+            });
         }
 
         @Override
