@@ -152,7 +152,25 @@ public class ComicDAO extends BaseDAO<Comic> {
         ContentValues cv = new ContentValues();
         cv.put(ComicTable.COLUMN_ID, data.getId());
         cv.put(ComicTable.COLUMN_TITLE, data.getTitle());
+        cv.put(ComicTable.COLUMN_DESCRIPTION, data.getDescription());
+        cv.put(ComicTable.COLUMN_FORMAT, data.getFormat());
         cv.put(ComicTable.COLUMN_THUMBNAIL_URL, data.getThumbnailUrl());
+
+        //For the URLs, we put it in one string, separed by '|'
+        if (data.getUrls() != null) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < data.getUrls().length; i++) {
+                String url = data.getUrls()[i];
+                sb.append(url);
+
+                if (i < data.getUrls().length - 1) {
+                    sb.append('|');
+                }
+            }
+            cv.put(ComicTable.COLUMN_URLS, sb.toString());
+        } else {
+            cv.putNull(ComicTable.COLUMN_URLS);
+        }
 
         return cv;
     }
@@ -165,8 +183,11 @@ public class ComicDAO extends BaseDAO<Comic> {
     private static Comic makeFromCursor(Cursor cursor) {
         int id = cursor.getInt(cursor.getColumnIndex(ComicTable.COLUMN_ID));
         String title = cursor.getString(cursor.getColumnIndex(ComicTable.COLUMN_TITLE));
+        String description = cursor.getString(cursor.getColumnIndex(ComicTable.COLUMN_DESCRIPTION));
+        String format = cursor.getString(cursor.getColumnIndex(ComicTable.COLUMN_FORMAT));
+        String urls = cursor.getString(cursor.getColumnIndex(ComicTable.COLUMN_URLS));
         String thumbnailUrl = cursor.getString(cursor.getColumnIndex(ComicTable.COLUMN_THUMBNAIL_URL));
 
-        return new Comic(id, title, thumbnailUrl);
+        return new Comic(id, title, description, format, urls, thumbnailUrl);
     }
 }

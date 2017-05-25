@@ -10,6 +10,9 @@ public class Comic {
 
     private int id;
     private String title;
+    private String description;
+    private String format;
+    private String[] urls;
     private String thumbnailUrl;
 
     /**
@@ -27,12 +30,20 @@ public class Comic {
      * Constructor to create the POJO from the DB
      * @param id
      * @param title
+     * @param description
+     * @param format
+     * @param urls
      * @param thumbnailUrl
      */
-    public Comic(int id, String title, String thumbnailUrl) {
+    public Comic(int id, String title, String description, String format, String urls, String thumbnailUrl) {
         this.id = id;
         this.title = title;
+        this.description = description;
+        this.format = format;
         this.thumbnailUrl = thumbnailUrl;
+
+        //parse the URLs
+        this.urls = urls != null ? urls.split("\\|") : null;
     }
 
     public int getId() {
@@ -41,6 +52,18 @@ public class Comic {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public String[] getUrls() {
+        return urls;
     }
 
     public String getThumbnailUrl() {

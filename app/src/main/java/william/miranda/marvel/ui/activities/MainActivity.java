@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import william.miranda.marvel.R;
 import william.miranda.marvel.ui.fragments.FragmentListComics;
 
+/**
+ * App Main Activity.
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override

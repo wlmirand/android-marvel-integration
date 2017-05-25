@@ -15,6 +15,15 @@ public class ComicResponse {
     @SerializedName("title")
     private String title;
 
+    @SerializedName("description")
+    private String description;
+
+    @SerializedName("format")
+    private String format;
+
+    @SerializedName("urls")
+    private UrlResponse[] urls;
+
     @SerializedName("thumbnail")
     private ImageResponse thumbnail;
 
