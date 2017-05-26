@@ -12,6 +12,7 @@ public class Comic {
     private String title;
     private String description;
     private String format;
+    private int pageCount;
     private String[] urls;
     private String thumbnailUrl;
 
@@ -22,8 +23,17 @@ public class Comic {
     public Comic(ComicResponse response) {
         this.id = response.getId();
         this.title = response.getTitle();
+        this.description = response.getDescription();
+        this.format = response.getFormat();
+        this.pageCount = response.getPageCount();
         this.thumbnailUrl = new ImageWrapper(response.getThumbnail())
                 .getUrl(ImageWrapper.ImageVariant.standard_large);
+
+        //Add urls from Response object to an array of String
+        this.urls = new String[response.getUrls().length];
+        for (int i=0 ; i<response.getUrls().length ; i++) {
+            this.urls[i] = response.getUrls()[i].getUrl();
+        }
     }
 
     /**
@@ -32,18 +42,19 @@ public class Comic {
      * @param title
      * @param description
      * @param format
+     * @param pageCount
      * @param urls
      * @param thumbnailUrl
      */
-    public Comic(int id, String title, String description, String format, String urls, String thumbnailUrl) {
+    public Comic(int id, String title, String description, String format,
+                 int pageCount, String[] urls, String thumbnailUrl) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.format = format;
+        this.pageCount = pageCount;
+        this.urls = urls;
         this.thumbnailUrl = thumbnailUrl;
-
-        //parse the URLs
-        this.urls = urls != null ? urls.split("\\|") : null;
     }
 
     public int getId() {
@@ -60,6 +71,10 @@ public class Comic {
 
     public String getFormat() {
         return format;
+    }
+
+    public int getPageCount() {
+        return pageCount;
     }
 
     public String[] getUrls() {

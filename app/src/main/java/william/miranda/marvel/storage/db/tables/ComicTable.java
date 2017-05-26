@@ -8,6 +8,7 @@ public class ComicTable {
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_FORMAT = "format";
+    public static final String COLUMN_PAGE_COUNT = "page_count";
     public static final String COLUMN_URLS = "urls";
     public static final String COLUMN_THUMBNAIL_URL = "thumbnail_url";
 
@@ -19,6 +20,7 @@ public class ComicTable {
             + COLUMN_TITLE + " text not null, "
             + COLUMN_DESCRIPTION + " text, "
             + COLUMN_FORMAT + " text, "
+            + COLUMN_PAGE_COUNT + " integer, "
             + COLUMN_URLS + " text, "
             + COLUMN_THUMBNAIL_URL + " text"
             + ");";

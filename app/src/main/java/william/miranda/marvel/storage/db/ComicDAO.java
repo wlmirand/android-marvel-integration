@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import william.miranda.marvel.api.response.UrlResponse;
 import william.miranda.marvel.model.Comic;
 import william.miranda.marvel.storage.db.tables.ComicTable;
 
@@ -154,23 +155,11 @@ public class ComicDAO extends BaseDAO<Comic> {
         cv.put(ComicTable.COLUMN_TITLE, data.getTitle());
         cv.put(ComicTable.COLUMN_DESCRIPTION, data.getDescription());
         cv.put(ComicTable.COLUMN_FORMAT, data.getFormat());
+        cv.put(ComicTable.COLUMN_PAGE_COUNT, data.getPageCount());
         cv.put(ComicTable.COLUMN_THUMBNAIL_URL, data.getThumbnailUrl());
 
-        //For the URLs, we put it in one string, separed by '|'
-        if (data.getUrls() != null) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < data.getUrls().length; i++) {
-                String url = data.getUrls()[i];
-                sb.append(url);
-
-                if (i < data.getUrls().length - 1) {
-                    sb.append('|');
-                }
-            }
-            cv.put(ComicTable.COLUMN_URLS, sb.toString());
-        } else {
-            cv.putNull(ComicTable.COLUMN_URLS);
-        }
+        //Add formatted Urls
+        cv.put(ComicTable.COLUMN_URLS, convertUrlsToString(data.getUrls()));
 
         return cv;
     }
@@ -185,9 +174,31 @@ public class ComicDAO extends BaseDAO<Comic> {
         String title = cursor.getString(cursor.getColumnIndex(ComicTable.COLUMN_TITLE));
         String description = cursor.getString(cursor.getColumnIndex(ComicTable.COLUMN_DESCRIPTION));
         String format = cursor.getString(cursor.getColumnIndex(ComicTable.COLUMN_FORMAT));
+        int pageCount = cursor.getInt(cursor.getColumnIndex(ComicTable.COLUMN_PAGE_COUNT));
         String urls = cursor.getString(cursor.getColumnIndex(ComicTable.COLUMN_URLS));
         String thumbnailUrl = cursor.getString(cursor.getColumnIndex(ComicTable.COLUMN_THUMBNAIL_URL));
 
-        return new Comic(id, title, description, format, urls, thumbnailUrl);
+        //parse the URLs from the DB to Array of String
+        String[] urlArray = urls != null ? urls.split("\\|") : null;
+
+        return new Comic(id, title, description, format, pageCount, urlArray, thumbnailUrl);
+    }
+
+    private static String convertUrlsToString(String[] urls) {
+        if (urls == null || urls.length == 0) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < urls.length; i++) {
+
+            String url = urls[i];
+            sb.append(url);
+
+            if (i < urls.length - 1) {
+                sb.append('|');
+            }
+        }
+        return sb.toString();
     }
 }
