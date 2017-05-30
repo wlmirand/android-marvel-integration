@@ -4,4 +4,8 @@
     <dimen name="adapterMarginRight">10dp</dimen>
     <dimen name="adapterMarginTop">15dp</dimen>
     <dimen name="adapterMarginBottom">15dp</dimen>
+
+    <dimen name="title_size">16sp</dimen>
+
+    <dimen name="textDistance">10dp</dimen>
 </resources>

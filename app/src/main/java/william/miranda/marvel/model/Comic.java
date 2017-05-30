@@ -1,20 +1,35 @@
 package william.miranda.marvel.model;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 import william.miranda.marvel.api.ImageWrapper;
 import william.miranda.marvel.api.response.ComicResponse;
+import william.miranda.marvel.api.response.CreatorSummaryResponse;
 
 /**
  * Model for Comic entity
  */
-public class Comic {
 
+public class Comic extends RealmObject {
+
+    @PrimaryKey
     private int id;
+
     private String title;
     private String description;
     private String format;
     private int pageCount;
-    private String[] urls;
+    private float price;
     private String thumbnailUrl;
+    private RealmList<Creator> creators;
+
+    /**
+     * Empty constructor
+     */
+    public Comic() {
+
+    }
 
     /**
      * Constructor to create our POJO from the Response
@@ -29,32 +44,24 @@ public class Comic {
         this.thumbnailUrl = new ImageWrapper(response.getThumbnail())
                 .getUrl(ImageWrapper.ImageVariant.standard_large);
 
-        //Add urls from Response object to an array of String
-        this.urls = new String[response.getUrls().length];
-        for (int i=0 ; i<response.getUrls().length ; i++) {
-            this.urls[i] = response.getUrls()[i].getUrl();
+        /* Consulting the API, I just found one price for a Comic,
+            but the API documentation returns an array of Prices, so
+            we will get only the first Price if it exists
+         */
+        if (response.getPrices() != null && response.getPrices().length != 0) {
+            this.price = response.getPrices()[0].getPrice();
         }
-    }
 
-    /**
-     * Constructor to create the POJO from the DB
-     * @param id
-     * @param title
-     * @param description
-     * @param format
-     * @param pageCount
-     * @param urls
-     * @param thumbnailUrl
-     */
-    public Comic(int id, String title, String description, String format,
-                 int pageCount, String[] urls, String thumbnailUrl) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.format = format;
-        this.pageCount = pageCount;
-        this.urls = urls;
-        this.thumbnailUrl = thumbnailUrl;
+        //Get the Creators
+        if (response.getCreators() != null &&
+                response.getCreators().getItems() != null &&
+                response.getCreators().getItems().length != 0) {
+
+            this.creators = new RealmList<>();
+            for (CreatorSummaryResponse sr : response.getCreators().getItems()) {
+                this.creators.add(new Creator(sr));
+            }
+        }
     }
 
     public int getId() {
@@ -77,11 +84,15 @@ public class Comic {
         return pageCount;
     }
 
-    public String[] getUrls() {
-        return urls;
+    public float getPrice() {
+        return price;
     }
 
     public String getThumbnailUrl() {
         return thumbnailUrl;
+    }
+
+    public RealmList<Creator> getCreators() {
+        return creators;
     }
 }

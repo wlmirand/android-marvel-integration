@@ -1,11 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<!--
+    Since we are implementing a Simple Detail Layout, we'll just
+    have the Views to display the Data, but depending on the Data "pattern" we may consider
+    implement a ListView/RecyclerView to have a list of Name -> Value items
+    to make our Detail layout looks like the PreferenceActivity
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/comic_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/comic_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextTitle"/>
+
+        <TextView
+            android:id="@+id/comic_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/textDistance"/>
+
+        <TextView
+            android:id="@+id/comic_page_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/textDistance"/>
+
+        <TextView
+            android:id="@+id/comic_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/textDistance"/>
+
+        <TextView
+            android:id="@+id/comic_creators"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/textDistance"/>
+
+    </LinearLayout>
+
+</ScrollView>

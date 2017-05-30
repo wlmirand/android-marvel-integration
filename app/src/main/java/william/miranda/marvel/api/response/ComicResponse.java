@@ -2,8 +2,6 @@ package william.miranda.marvel.api.response;
 
 import com.google.gson.annotations.SerializedName;
 
-import william.miranda.marvel.storage.db.tables.ComicTable;
-
 /**
  * Class to map the JSON Response from Comics API
  * We may omit the annotations if the json field matches the attribute name,
@@ -38,6 +36,9 @@ public class ComicResponse {
     @SerializedName("images")
     private ImageResponse[] images;
 
+    @SerializedName("creators")
+    private CreatorListResponse creators;
+
     public int getId() {
         return id;
     }
@@ -58,7 +59,7 @@ public class ComicResponse {
         return pageCount;
     }
 
-    public ComicPriceResponse[] getPriceResponse() {
+    public ComicPriceResponse[] getPrices() {
         return prices;
     }
 
@@ -72,5 +73,9 @@ public class ComicResponse {
 
     public ImageResponse[] getImages() {
         return images;
+    }
+
+    public CreatorListResponse getCreators() {
+        return creators;
     }
 }

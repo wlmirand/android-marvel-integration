@@ -12,14 +12,14 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import william.miranda.marvel.R;
 import william.miranda.marvel.adapters.ComicAdapter;
 import william.miranda.marvel.api.ApiWrapper;
 import william.miranda.marvel.api.response.ComicDataWrapperResponse;
 import william.miranda.marvel.api.response.ComicResponse;
 import william.miranda.marvel.model.Comic;
-import william.miranda.marvel.storage.db.ComicDAO;
-import william.miranda.marvel.storage.db.tables.ComicTable;
 import william.miranda.marvel.tasks.ComicsTask;
 import william.miranda.marvel.ui.activities.ComicDetailActivity;
 
@@ -36,7 +36,7 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
 
             //Create the Intent and pass the Comic ID as Extra...
             Intent intent = new Intent(getContext(), ComicDetailActivity.class);
-            intent.putExtra(ComicTable.COLUMN_ID, comic.getId());
+            intent.putExtra("comic_id", comic.getId());
 
             //Open the detail activity
             startActivity(intent);
@@ -82,24 +82,30 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
     public void handleResult(ComicDataWrapperResponse responseBody) {
 
         List<Comic> listComic;
-        ComicDAO comicDAO = new ComicDAO(getContext());
+
+        Realm.init(getContext());
+        Realm realm = Realm.getDefaultInstance();
+
         if (responseBody != null &&
                 responseBody.getCode() == ApiWrapper.HTTP_SUCCESS_CODE) {
             //If Success, we iterate all ComicResponse and create our comic POJOs
             listComic = new ArrayList<>();
             for (ComicResponse item : responseBody.getData().getResults()) {
-                listComic.add(new Comic(item));
-            }
+                Comic comic = new Comic(item);
+                listComic.add(comic);
 
-            //save the list on the DB
-            comicDAO.insertList(listComic);
+                realm.beginTransaction();
+                realm.copyToRealmOrUpdate(comic);
+                realm.commitTransaction();
+            }
         } else {
             //Could not fetch data from Api, so we use the Local data
-            listComic = comicDAO.query();
+            RealmResults<Comic> comics = realm.where(Comic.class).findAll();
+            listComic = comics.subList(0, comics.size());
         }
-
 
         //Fill the adapter with new Data
         adapter.swap(listComic);
+
     }
 }
