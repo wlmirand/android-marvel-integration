@@ -28,6 +28,12 @@ import william.miranda.marvel.ui.activities.ComicDetailActivity;
  */
 public class FragmentListComics extends Fragment implements ComicsTask.Callback {
 
+    /**
+     * Limit and offset to call the Api
+     */
+    private static final int LIMIT = 100;
+    private static final int OFFSET = 0;
+
     private RecyclerView recyclerView;
     private ComicAdapter adapter;
     private ComicAdapter.OnItemClickListener clickListener = new ComicAdapter.OnItemClickListener() {
@@ -69,7 +75,7 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //Run the task to fetch comics from Api
-        new ComicsTask(100, 0, this).execute();
+        new ComicsTask(LIMIT, OFFSET, this).execute();
 
         return view;
     }
@@ -91,21 +97,22 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
             //If Success, we iterate all ComicResponse and create our comic POJOs
             listComic = new ArrayList<>();
             for (ComicResponse item : responseBody.getData().getResults()) {
+                //Add the object to a list
                 Comic comic = new Comic(item);
                 listComic.add(comic);
 
+                //Persists the object if needed
                 realm.beginTransaction();
                 realm.copyToRealmOrUpdate(comic);
                 realm.commitTransaction();
             }
         } else {
-            //Could not fetch data from Api, so we use the Local data
+            //Could not fetch data from Api, so we use the Local data if available
             RealmResults<Comic> comics = realm.where(Comic.class).findAll();
             listComic = comics.subList(0, comics.size());
         }
 
         //Fill the adapter with new Data
         adapter.swap(listComic);
-
     }
 }

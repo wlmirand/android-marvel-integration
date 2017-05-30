@@ -9,4 +9,10 @@
     <string name="text_no_page_count">No page count available</string>
     <string name="text_no_price">No price available</string>
     <string name="text_no_creators">No creators available</string>
+
+    <string name="budget">Budget Available</string>
+    <string name="calculate">Calculate!!</string>
+    <string name="comics_purchased">Comics Purchased: %1$d</string>
+    <string name="pages_purchased">Pages Purchased: %1$d</string>
+    <string name="remaining_budget">Remaining Budget: %1$.2f</string>
 </resources>

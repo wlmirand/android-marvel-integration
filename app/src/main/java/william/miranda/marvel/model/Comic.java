@@ -2,6 +2,7 @@ package william.miranda.marvel.model;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 import william.miranda.marvel.api.ImageWrapper;
 import william.miranda.marvel.api.response.ComicResponse;
@@ -23,6 +24,7 @@ public class Comic extends RealmObject {
     private float price;
     private String thumbnailUrl;
     private RealmList<Creator> creators;
+    private float pricePerPage;
 
     /**
      * Empty constructor
@@ -52,6 +54,8 @@ public class Comic extends RealmObject {
             this.price = response.getPrices()[0].getPrice();
         }
 
+        this.pricePerPage = pageCount != 0 ? price/pageCount : 0;
+
         //Get the Creators
         if (response.getCreators() != null &&
                 response.getCreators().getItems() != null &&
@@ -62,6 +66,21 @@ public class Comic extends RealmObject {
                 this.creators.add(new Creator(sr));
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Comic)) {
+            return false;
+        }
+
+        Comic comic = (Comic) obj;
+        return comic.getId() == this.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 
     public int getId() {
@@ -94,5 +113,9 @@ public class Comic extends RealmObject {
 
     public RealmList<Creator> getCreators() {
         return creators;
+    }
+
+    public float getPricePerPage() {
+        return pricePerPage;
     }
 }
