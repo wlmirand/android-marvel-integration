@@ -35,6 +35,12 @@ public class ComicsTask extends AsyncTask<Void, Void, Response<ComicDataWrapperR
         return null;
     }
 
+    /**
+     * When the Job is done, notify the caller using the Interface
+     * We can improve this code by sending the Whole response to the Caller
+     * so we can handle all response codes in a different way.
+     * @param response
+     */
     @Override
     protected void onPostExecute(Response<ComicDataWrapperResponse> response) {
         if (caller != null) {

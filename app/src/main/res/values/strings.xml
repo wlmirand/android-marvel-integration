@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Marvel Integration</string>
 
+    <string name="api_error">Error fetching Marvel Service\Using offline data</string>
+    <string name="api_error_no_data">Error fetching Marvel Service\nNo previous data available</string>
+
     <string name="text_page_count">Page Count: %1$d</string>
     <string name="text_price">Price: $ %1$.2f</string>
     <string name="text_creators">"Creators:\n%1$s"</string>

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,6 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import william.miranda.marvel.R;
 import william.miranda.marvel.adapters.ComicAdapter;
-import william.miranda.marvel.api.ApiWrapper;
 import william.miranda.marvel.api.response.ComicDataWrapperResponse;
 import william.miranda.marvel.api.response.ComicResponse;
 import william.miranda.marvel.model.Comic;
@@ -25,6 +25,9 @@ import william.miranda.marvel.ui.activities.ComicDetailActivity;
 
 /**
  * Fragment to display a Comics list
+ * Due to simplicity, we are not using a robust architecture like MVC or MVP,
+ * thus there's no formal Controller class.
+ * The Api Calls are being done where they are needed "through" the ApiWrapper singleton
  */
 public class FragmentListComics extends Fragment implements ComicsTask.Callback {
 
@@ -109,6 +112,13 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
             //Could not fetch data from Api, so we use the Local data if available
             RealmResults<Comic> comics = realm.where(Comic.class).findAll();
             listComic = comics.subList(0, comics.size());
+
+            //Show a message to inform the user
+            if (listComic == null || listComic.isEmpty()) {
+                Toast.makeText(getContext(), R.string.api_error_no_data, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), R.string.api_error, Toast.LENGTH_LONG).show();
+            }
         }
 
         //Fill the adapter with new Data
