@@ -2,9 +2,6 @@ package william.miranda.marvel.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import william.miranda.marvel.R;
-import william.miranda.marvel.adapters.ComicAdapter;
 import william.miranda.marvel.model.Comic;
-import william.miranda.marvel.tasks.ComicsTask;
 
 /**
  * Simple Fragment where the user insert the Budget

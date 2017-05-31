@@ -92,8 +92,7 @@ public class FragmentListComics extends Fragment implements ComicsTask.Callback 
         Realm.init(getContext());
         Realm realm = Realm.getDefaultInstance();
 
-        if (responseBody != null &&
-                responseBody.getCode() == ApiWrapper.HTTP_SUCCESS_CODE) {
+        if (responseBody != null) {
             //If Success, we iterate all ComicResponse and create our comic POJOs
             listComic = new ArrayList<>();
             for (ComicResponse item : responseBody.getData().getResults()) {

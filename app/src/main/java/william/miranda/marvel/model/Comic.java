@@ -2,7 +2,6 @@ package william.miranda.marvel.model;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 import william.miranda.marvel.api.ImageWrapper;
 import william.miranda.marvel.api.response.ComicResponse;

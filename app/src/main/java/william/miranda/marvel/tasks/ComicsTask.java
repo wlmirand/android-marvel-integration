@@ -38,8 +38,12 @@ public class ComicsTask extends AsyncTask<Void, Void, Response<ComicDataWrapperR
     @Override
     protected void onPostExecute(Response<ComicDataWrapperResponse> response) {
         if (caller != null) {
-            //Send the response body to the UI and let it handle all the result
-            caller.handleResult(response.body());
+            if (response != null && response.code() == ApiWrapper.HTTP_SUCCESS_CODE) {
+                //Send the response body to the UI and let it handle all the result
+                caller.handleResult(response.body());
+            } else {
+                caller.handleResult(null);
+            }
         }
     }
 }
